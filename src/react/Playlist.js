@@ -188,11 +188,8 @@ class Playlist extends React.Component{
     }
     deleteFile = (event)=>{
         let currPlaylist = Array.from(this.state.playlist);
-        // console.log(currPlaylist);
-        // console.log(currPlaylist[this.state.indexFile]);
         ipcRenderer.send("deleteFile",{path: this.props.path, file: this.state.playlist[this.state.indexFile][0]});
         ipcRenderer.on("deletedFile",(event,fileName)=>{
-            // console.log('a');
             this.removeFileFromPlaylist(currPlaylist, fileName)
         })
     }
