@@ -3,9 +3,11 @@ const fs = require('fs-extra')
 const {ipcRenderer, ipcMain, app, BrowserWindow} = require('electron');
 const isDev = require('electron-is-dev');
 const ytdl = require("./ytdl.js");
-const { getAudioDurationInSeconds } = require('get-audio-duration');
 let win, downloadFolder;
 let directory = __dirname.replace('app.asar','app.asar.unpacked');
+const { getAudioDurationInSeconds } = require('get-audio-duration');
+// require(directory.replace('build','node_modules')+"/get-audio-duration/dist/commonjs/index.js")
+
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
@@ -20,7 +22,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      preload: path.join(directory, "preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
   win.loadURL(
@@ -45,8 +47,8 @@ ipcMain.on('close',()=>{
   win.close()
 })
 ipcMain.on('getCurrFolder',(event)=>{
-  console.log(directory)
-  console.log(app.getAppPath())
+  console.log(directory);
+  console.log(app.getAppPath());
   event.reply("currFolder",directory);
 })
 ipcMain.on('openFolders', (event,folderPath)=>{
@@ -66,6 +68,7 @@ ipcMain.on('getFolders', async(event,folderPath)=>{
 })
 ipcMain.on("getFiles", (event, data)=>{
   data.path = path.join(downloadFolder, data.path);
+  event.reply("currFolder", data.path);
   let files = [];
   let folderFiles = fs.readdirSync(data.path);
   // console.log(folderFiles)
@@ -79,13 +82,16 @@ ipcMain.on("getFiles", (event, data)=>{
   else{
     folderFiles.forEach((file) =>{
       //index doesnt work because it will keep adding before getaudioduration is fully done
-      let filePath = path.join(data.path,file)
+      let filePath = path.join(data.path,file);
+      event.reply("currFolder", filePath);
       getAudioDurationInSeconds(filePath).then((duration) => {
         files.push([file,duration,fs.statSync(filePath).birthtimeMs]);
         event.reply('gotFiles', files);
         // if(num === array.length){
         //   resolve(files);
         // }
+      }).catch((err)=>{
+        event.reply("currFolder", err);
       }); 
     });
   }

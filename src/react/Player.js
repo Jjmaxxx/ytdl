@@ -54,6 +54,7 @@ class Player extends React.Component{
         }
     }
     componentDidMount(){
+        console.log(this.props.filePath);
         //this.getNewVideo(this.props.index);
         //console.log('remounted')
         //console.log(this.props.filesList)
@@ -61,6 +62,8 @@ class Player extends React.Component{
         //console.log(originalPlaylist);
         this.setState({playlist:originalPlaylist});
         this.setState({filePath:this.props.filePath});
+        console.log(this.state.filePath);
+        console.log(__dirname)
         pipWidth ="0px";
         pipHeight="0px";
     }

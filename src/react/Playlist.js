@@ -36,8 +36,13 @@ class Playlist extends React.Component{
     componentDidMount(){
         ipcRenderer.send("getFiles",{path:this.props.path,getPlaylistFromMap:helperFunctions.getPlaylistFromMap(this.props.path)});
         //console.log("playlist mounted");
+        // ipcRenderer.send('getCurrFolder');
+        // ipcRenderer.on('currFolder',(event,folder)=>{
+        //   console.log('a')
+        //   console.log(folder)
+        // })
         ipcRenderer.on('gotFiles',(event,files)=>{
-            // console.log(files);
+            console.log(files);
             if(files){
                 let sortFiles = new Promise(resolve=>{
                     resolve(

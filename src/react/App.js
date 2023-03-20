@@ -42,14 +42,11 @@ class App extends React.Component{
     //this.state = {variable:'some value'}
   }
   componentDidMount() {
+    console.log('mount')
     this.getFoldersList(downloadFolder);
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
-    // ipcRenderer.send('getCurrFolder');
-    // ipcRenderer.on('currFolder',(event,folder)=>{
-    //   console.log('a')
-    //   console.log(folder)
-    // })
+    
     ipcRenderer.on('newFolder',(event,folder)=>{
       this.getFoldersList(downloadFolder);
       this.setState({page:folder})
@@ -215,7 +212,7 @@ class App extends React.Component{
                 <p style = {classes.drawerTabs}>downloads</p>
               </div> */}
             </Drawer>
-            <Player key = {this.state.filesList} sendFileToParent = {this.handleNewSelectedFile} index = {this.state.fileIndex} filesList ={this.state.filesList} filePath={downloadFolder+this.state.page+"/"}/>
+            <Player key = {this.state.filesList} sendFileToParent = {this.handleNewSelectedFile} index = {this.state.fileIndex} filesList ={this.state.filesList} filePath={"../../app.asar.unpacked/build/videos/"+this.state.page+"/"}/>
           </div>
             <Paper style={{position:"fixed",backgroundColor:"black", width:"25%", left:this.state.width*.75}}>
               {this.state.downloadingFile}

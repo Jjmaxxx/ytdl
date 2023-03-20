@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "reactBuild": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "concurrently -k \"npm start\" \"npm:electron\"",
@@ -44,18 +44,26 @@
     "build-electron": "mkdir build/src && robocopy electron build/electron /S & robocopy src build/src /S",
     "package": "electron-builder build --win -c.extraMetadata.main=build/electron.js --publish never"
   },
-  "build": {
+  "reactBuild": {
     "files": [
       "build/**/*",
       "node_modules/**/*"
     ],
     "extends": null,
-    "asar": false,
     "publish": {
       "provider": "github",
       "repo": "youtube downloader and player",
       "owner": "jjmaxxx"
     }
+  },
+  "build":{
+    "asarUnpack": [
+      "build",
+      "node_modules/get-audio-duration",
+      "node_modules/node-ffprobe-installer",
+      "node_modules/child_process",
+      "node_modules/ffmpeg-static"
+    ]
   },
   "eslintConfig": {
     "extends": [
